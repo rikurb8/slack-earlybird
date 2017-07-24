@@ -1,0 +1,21 @@
+{
+  "name": "slack-listings",
+  "version": "0.0.0",
+  "description": "Leaderboards and stuff",
+  "main": "index.js",
+  "author": "rikurb8",
+  "license": "MIT",
+  "dependencies": {
+    "rxjs": "^5.4.2",
+    "slack": "^8.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.14",
+    "nodemon": "^1.11.0",
+    "typescript": "^2.4.2"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch & nodemon dist"
+  }
+}
