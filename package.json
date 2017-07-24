@@ -6,10 +6,15 @@
   "author": "rikurb8",
   "license": "MIT",
   "dependencies": {
+    "knex": "^0.13.0",
+    "objection": "^0.8.5",
+    "pg": "^7.0.2",
     "rxjs": "^5.4.2",
-    "slack": "^8.3.1"
+    "slack": "^8.3.1",
+    "sqlite3": "^3.1.8"
   },
   "devDependencies": {
+    "@types/knex": "^0.0.56",
     "@types/node": "^8.0.14",
     "nodemon": "^1.11.0",
     "typescript": "^2.4.2"

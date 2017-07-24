@@ -1,5 +1,7 @@
 import Bot from './Bot';
 import MessageLogger from './MessageLogger';
+import * as Knex from 'knex';
+import { Model } from 'objection';
 
 const TOKEN = process.env.SLACKBOT_TOKEN;
 
@@ -7,6 +9,10 @@ if (!TOKEN) {
   throw new Error('Please add a SLACKBOT_TOKEN env variable');
 }
 
-let bot = new Bot(TOKEN);
+const knexConfig = require('../knexfile');
+const knex = Knex(knexConfig.development);
+knex.migrate.latest();
+Model.knex(knex);
 
+let bot = new Bot(TOKEN);
 let messageLogger = new MessageLogger(bot.getMessageObservable());
