@@ -1,6 +1,15 @@
 import * as slack from 'slack';
 import { Observable } from "rxjs/Rx";
 
+export interface SlackMessage {
+  type: string,
+  channel: string,
+  user: string,
+  text: string,
+  ts: number,
+  hidden?: boolean,
+}
+
 export default class Bot {
   private bot: any;
   private token: string;
@@ -12,9 +21,13 @@ export default class Bot {
     this.bot.listen({token});
   }
 
-  public getMessageObservable(): Observable<object> {
+  public getMessageObservable(): Observable<SlackMessage> {
     const observable = Observable.create(observer => {
-      this.bot.message(message => observer.next(message));
+      this.bot.message((message: SlackMessage) => {
+        if (message.type === 'message' && !message.hidden) {
+          observer.next(message);
+        }
+      });
     });
 
     return observable;
