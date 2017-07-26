@@ -1,0 +1,26 @@
+version: "2"
+volumes:
+  pg-data:
+services:
+  postgres:
+    image: "postgres:9.6"
+    restart: always
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: slack-listings
+      POSTGRES_PASSWORD: asddasdas
+      POSTGRES_USER: postgres
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+  bot:
+    image: ridgef/slack-listings:0.0.2
+    env_file:
+      - config.env
+    restart: always
+    container_name: slack-listings
+    depends_on:
+      - postgres
+    environment:
+      - NODE_ENV=production
