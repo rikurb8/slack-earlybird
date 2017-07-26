@@ -14,5 +14,6 @@ const knex = Knex(knexConfig.development);
 knex.migrate.latest();
 Model.knex(knex);
 
-let bot = new Bot(TOKEN);
-let messageLogger = new MessageLogger(bot.getMessageObservable());
+let messageLogger = new MessageLogger();
+let bot = new Bot(TOKEN, messageLogger);
+

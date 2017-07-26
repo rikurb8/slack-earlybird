@@ -4,9 +4,18 @@ import * as Moment from 'moment';
 import Message from './models/Message';
 
 export default class MessageLogger {
-  constructor(messageObservable: Observable<SlackMessage>) {
-    messageObservable
-      .subscribe(msg => this.handleNewMessage(msg))
+  /**
+   * setMessageObservable
+   */
+  public setMessageObservable(observable: Observable<SlackMessage>) {
+    observable.subscribe(msg => this.handleNewMessage(msg));
+  }
+
+  /**
+   * getAllMessages
+   */
+  public async getAllMessages(): Promise<Message[]> {
+    return await Message.query();
   }
 
   private async handleNewMessage(message: SlackMessage) {
