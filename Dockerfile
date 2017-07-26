@@ -4,7 +4,9 @@ WORKDIR app
 
 # Run npm install first for nice caching
 ADD package.json package.json
-RUN npm install --production
+# FIXME: think about this one, could just install the prod deps, but what
+# about typescript transpiling? where to handle that then?
+RUN npm install
 
 ADD . .
 
