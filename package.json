@@ -22,6 +22,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch & nodemon dist"
+    "dev": "tsc --watch & nodemon dist",
+    "start": "tsc && node dist/index.js"
   }
 }

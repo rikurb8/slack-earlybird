@@ -10,7 +10,9 @@ module.exports = {
   production: {
     client: 'postgresql',
     connection: {
-      database: 'slack-listings'
+      database: 'slack-listings',
+      user: 'postgres',
+      password: 'asddasdas'
     },
     pool: {
       min: 2,
