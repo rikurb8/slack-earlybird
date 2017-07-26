@@ -50,20 +50,36 @@ export default class Bot {
           case 'listing':
             this.sendMessage('Leader: Riku');
             break;
-          case 'debug':
+          case 'dump':
             const messages = await this.logger
               .getAllMessages();
 
             const joinedMessages = messages
-              .map(msg => `${msg.message} - ${msg.slackId} at ${msg.timestamp}`)
+              .map(msg => `${msg.timestamp};${msg.slackId};${msg.message}`)
               .join('\n')
 
-            this.sendMessage(joinedMessages)
+            let csv = "timestamp;user;message\n";
+            csv += joinedMessages;
+
+            this.sendSnippet(csv);
             break;
           default:
             break;
         }
       })
+  }
+
+  private sendSnippet(content: string) {
+    slack.files.upload({
+      token: this.token,
+      content: content,
+      channels: 'tietokonekerho',
+      title: ':neckbeard: :neckbeard: :neckbeard:'
+    }, (err, data) => {
+      if (err) {
+        console.log(`Error posting snippet, ${err}`);
+      }
+    });
   }
 
   private sendMessage(message: string) {
