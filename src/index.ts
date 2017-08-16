@@ -21,8 +21,8 @@ knex.migrate.latest().catch(() => {
 
 Model.knex(knex);
 
-let messageLogger = new MessageLogger();
-let bot = new Bot(TOKEN, messageLogger);
+const messageLogger = new MessageLogger();
+const bot = new Bot(TOKEN, messageLogger);
 
 console.log('Initialization complete, listening..');
 

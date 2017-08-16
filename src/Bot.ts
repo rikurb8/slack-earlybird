@@ -1,6 +1,6 @@
-import * as slack from 'slack';
-import { Observable } from 'rxjs/Rx';
 import MessageLogger from './MessageLogger';
+import { Observable } from 'rxjs/Rx';
+import * as slack from 'slack';
 
 export interface SlackMessage {
   type: string;
@@ -26,18 +26,6 @@ export default class Bot {
     this.logger.setMessageObservable(this.getMessageObservable());
 
     this.listenToCommands();
-  }
-
-  private getMessageObservable(): Observable<SlackMessage> {
-    const observable = Observable.create(observer => {
-      this.bot.message((message: SlackMessage) => {
-        if (message.type === 'message' && !message.hidden) {
-          observer.next(message);
-        }
-      });
-    });
-
-    return observable;
   }
 
   /**
@@ -67,13 +55,25 @@ export default class Bot {
     });
   }
 
+  private getMessageObservable(): Observable<SlackMessage> {
+    const observable = Observable.create(observer => {
+      this.bot.message((message: SlackMessage) => {
+        if (message.type === 'message' && !message.hidden) {
+          observer.next(message);
+        }
+      });
+    });
+
+    return observable;
+  }
+
   private sendSnippet(content: string) {
     slack.files.upload(
       {
-        token: this.token,
-        content: content,
         channels: 'tietokonekerho',
+        content,
         title: ':neckbeard: :neckbeard: :neckbeard:',
+        token: this.token,
       },
       (err, data) => {
         if (err) {
@@ -86,9 +86,9 @@ export default class Bot {
   private sendMessage(message: string) {
     slack.chat.postMessage(
       {
-        token: this.token,
         channel: 'tietokonekerho',
         text: message,
+        token: this.token,
       },
       (err, data) => {
         if (err) {

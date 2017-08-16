@@ -1,14 +1,14 @@
 import { Model } from 'objection';
 
 export default class Message extends Model {
-  readonly id: number;
-  slackId: string;
-  message: string;
-  timestamp: number;
+  public readonly id: number;
+  public slackId: string;
+  public message: string;
+  public timestamp: number;
 
-  static tableName = 'Message';
+  public static tableName = 'Message';
 
-  static jsonSchema = {
+  public static jsonSchema = {
     type: 'object',
     required: ['message', 'timestamp'],
 
@@ -19,5 +19,5 @@ export default class Message extends Model {
     },
   };
 
-  static modelPaths = [__dirname];
+  public static modelPaths = [__dirname];
 }
