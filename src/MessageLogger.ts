@@ -22,7 +22,7 @@ export default class MessageLogger {
     const isFirstMessageOfDay = await this.isFirstMessageOfDay();
 
     if (!isFirstMessageOfDay) {
-      return
+      return;
     }
 
     this.saveMessage(message);
@@ -31,8 +31,7 @@ export default class MessageLogger {
   private async isFirstMessageOfDay(): Promise<boolean> {
     const today = Moment().startOf('day').unix();
 
-    let todaysMessage = await Message
-      .query()
+    let todaysMessage = await Message.query()
       .where('timestamp', '>', today)
       .first();
 
@@ -40,12 +39,10 @@ export default class MessageLogger {
   }
 
   private async saveMessage(message: SlackMessage) {
-    let savedMessage = await Message
-      .query()
-      .insert({
-        message: message.text,
-        slackId: message.user,
-        timestamp: message.ts,
-      });
+    let savedMessage = await Message.query().insert({
+      message: message.text,
+      slackId: message.user,
+      timestamp: message.ts,
+    });
   }
 }

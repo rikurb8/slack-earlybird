@@ -16,8 +16,8 @@ export default class Message extends Model {
       id: { type: 'integer' },
       message: { type: 'string' },
       timestamp: { type: 'float' },
-    }
-  }
+    },
+  };
 
   static modelPaths = [__dirname];
 }
