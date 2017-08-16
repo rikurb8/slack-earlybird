@@ -18,11 +18,13 @@
     "@types/knex": "^0.0.56",
     "@types/node": "^8.0.14",
     "nodemon": "^1.11.0",
+    "tslint": "^5.6.0",
     "typescript": "^2.4.2"
   },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch & nodemon dist",
-    "start": "tsc && node dist/index.js"
+    "start": "tsc && node dist/index.js",
+    "lint": "tslint -c tslint.json 'src/**/*.ts'"
   }
 }
