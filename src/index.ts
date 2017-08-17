@@ -4,9 +4,14 @@ import * as Knex from 'knex';
 import { Model } from 'objection';
 
 const TOKEN = process.env.SLACKBOT_TOKEN;
+const CHANNEL = process.env.CHANNEL;
 
 if (!TOKEN) {
   throw new Error('Please add a SLACKBOT_TOKEN env variable');
+}
+
+if (!CHANNEL) {
+  throw new Error('Please add a CHANNEL env variable');
 }
 
 const knexConfig = require('../knexfile');
@@ -22,10 +27,6 @@ knex.migrate.latest().catch(() => {
 Model.knex(knex);
 
 const messageLogger = new MessageLogger();
-const bot = new Bot(TOKEN, messageLogger);
+const bot = new Bot(TOKEN, messageLogger, CHANNEL);
 
-console.log('Initialization complete, listening..');
-
-function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+console.log(`Initializating complete, posting to channel ${CHANNEL}..`);

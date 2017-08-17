@@ -16,8 +16,9 @@ export default class Bot {
   private bot: any;
   private token: string;
   private logger: MessageLogger;
+  private channel: string;
 
-  constructor(token: string, messageLogger: MessageLogger) {
+  constructor(token: string, messageLogger: MessageLogger, channel: string) {
     // FIXME: bit of a dummy place to but this here, but good enough for now
     const listenToDisconnect = () => {
       this.bot.ws.on('close', (code, reason) => {
@@ -27,6 +28,7 @@ export default class Bot {
     }
 
     this.token = token;
+    this.channel = channel;
     this.bot = slack.rtm.client();
     this.bot.listen({ token }, listenToDisconnect);
 
@@ -78,7 +80,7 @@ export default class Bot {
   private sendSnippet(content: string) {
     slack.files.upload(
       {
-        channels: 'tietokonekerho',
+        channels: this.channel,
         content,
         title: ':neckbeard: :neckbeard: :neckbeard:',
         token: this.token,
@@ -94,7 +96,7 @@ export default class Bot {
   private sendMessage(message: string) {
     slack.chat.postMessage(
       {
-        channel: 'tietokonekerho',
+        channel: this.channel,
         text: message,
         token: this.token,
       },
