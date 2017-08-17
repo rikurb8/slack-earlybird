@@ -42,7 +42,7 @@ export default class MessageLogger {
     const savedMessage = await Message.query().insert({
       message: message.text,
       slackId: message.user,
-      timestamp: message.ts,
+      timestamp: Math.floor(message.ts),
     });
   }
 }

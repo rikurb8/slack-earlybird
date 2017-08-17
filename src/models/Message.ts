@@ -15,7 +15,7 @@ export default class Message extends Model {
     properties: {
       id: { type: 'integer' },
       message: { type: 'string' },
-      timestamp: { type: 'float' },
+      timestamp: { type: 'integer' },
     },
   };
 
