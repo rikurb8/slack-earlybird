@@ -14,8 +14,13 @@ export default class MessageLogger {
   /**
    * getAllMessages
    */
-  public async getAllMessages(): Promise<Message[]> {
-    return await Message.query();
+  public async getAllMessages(): Promise<string> {
+    const messages = await Message.query();
+    const joinedMessages = messages
+    .map(msg => `${msg.timestamp};${msg.slackId};${msg.message}`)
+    .join('\n');
+
+    return 'timestamp;user;message\n' + joinedMessages;
   }
 
   private async handleNewMessage(message: SlackMessage) {

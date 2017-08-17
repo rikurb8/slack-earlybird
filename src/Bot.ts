@@ -48,16 +48,7 @@ export default class Bot {
           this.sendMessage('Leader: Riku');
           break;
         case 'dump':
-          const messages = await this.logger.getAllMessages();
-
-          const joinedMessages = messages
-            .map(msg => `${msg.timestamp};${msg.slackId};${msg.message}`)
-            .join('\n');
-
-          let csv = 'timestamp;user;message\n';
-          csv += joinedMessages;
-
-          this.sendSnippet(csv);
+          this.sendSnippet(await this.logger.getAllMessages());
           break;
         default:
           break;
