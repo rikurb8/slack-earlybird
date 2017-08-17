@@ -2,6 +2,7 @@ import { Observable } from 'rxjs/Rx';
 import { SlackMessage } from './Bot';
 import * as Moment from 'moment';
 import Message from './models/Message';
+import * as AsciiTable from 'ascii-table';
 
 export default class MessageLogger {
   /**
@@ -17,10 +18,29 @@ export default class MessageLogger {
   public async getAllMessages(): Promise<string> {
     const messages = await Message.query();
     const joinedMessages = messages
-    .map(msg => `${msg.timestamp};${msg.slackId};${msg.message}`)
-    .join('\n');
+      .map(msg => `${msg.timestamp};${msg.slackId};${msg.message}`)
+      .join('\n');
 
     return 'timestamp;user;message\n' + joinedMessages;
+  }
+
+  /**
+   * getTopListing
+   */
+  public async getTopListing(): Promise<string> {
+    const groupedByMessage = await Message.query()
+      .select('slackId')
+      .count('slackId')
+      .groupBy('slackId');
+
+    const table = new AsciiTable('Ranking');
+    table.setHeading('Count', 'User');
+
+    groupedByMessage.forEach(group => {
+      table.addRow(group.count, group.slackId);
+    });
+
+    return table.toString();
   }
 
   private async handleNewMessage(message: SlackMessage) {

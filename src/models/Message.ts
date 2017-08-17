@@ -5,6 +5,7 @@ export default class Message extends Model {
   public slackId: string;
   public message: string;
   public timestamp: number;
+  public count?: string;
 
   public static tableName = 'Message';
 

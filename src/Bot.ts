@@ -25,7 +25,7 @@ export default class Bot {
         console.log(`${Moment().toISOString} - Had to reset the connection`);
         this.bot.listen({ token: this.token }, listenToDisconnect);
       });
-    }
+    };
 
     this.token = token;
     this.channel = channel;
@@ -45,7 +45,7 @@ export default class Bot {
     this.getMessageObservable().subscribe(async (message: SlackMessage) => {
       switch (message.text) {
         case 'listing':
-          this.sendMessage('Leader: Riku');
+          this.sendMessage(`\`\`\`${await this.logger.getTopListing()}\`\`\``);
           break;
         case 'dump':
           this.sendSnippet(await this.logger.getAllMessages());
