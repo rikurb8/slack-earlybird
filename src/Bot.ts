@@ -1,6 +1,7 @@
 import MessageLogger from './MessageLogger';
 import { Observable } from 'rxjs/Rx';
 import * as slack from 'slack';
+import * as Moment from 'moment';
 
 export interface SlackMessage {
   type: string;
@@ -17,10 +18,17 @@ export default class Bot {
   private logger: MessageLogger;
 
   constructor(token: string, messageLogger: MessageLogger) {
-    this.token = token;
+    // FIXME: bit of a dummy place to but this here, but good enough for now
+    const listenToDisconnect = () => {
+      this.bot.ws.on('close', (code, reason) => {
+        console.log(`${Moment().toISOString} - Had to reset the connection`);
+        this.bot.listen({ token: this.token }, listenToDisconnect);
+      });
+    }
 
+    this.token = token;
     this.bot = slack.rtm.client();
-    this.bot.listen({ token });
+    this.bot.listen({ token }, listenToDisconnect);
 
     this.logger = messageLogger;
     this.logger.setMessageObservable(this.getMessageObservable());
