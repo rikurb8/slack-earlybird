@@ -1,9 +1,8 @@
 module.exports = {
   development: {
-    client: 'sqlite3',
-    useNullAsDefault: true,
+    client: 'postgresql',
     connection: {
-      filename: './slack-listings.db'
+      database: 'slack-listings',
     }
   },
 
