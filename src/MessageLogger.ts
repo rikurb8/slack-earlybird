@@ -44,6 +44,10 @@ export default class MessageLogger {
   }
 
   private async handleNewMessage(message: SlackMessage) {
+    if (!this.isValidFirstMessage(message.text)) {
+      return;
+    }
+    
     const isFirstMessageOfDay = await this.isFirstMessageOfDay();
 
     if (!isFirstMessageOfDay) {
@@ -61,6 +65,19 @@ export default class MessageLogger {
       .first();
 
     return todaysMessage === undefined;
+  }
+
+  private isValidFirstMessage(message: string): boolean {
+    // TODO: move valid greetings to a config file for easier configuration
+    const validFirstMessages = ["huomenta"]
+
+    for (let validMessage in validFirstMessages) {
+      if (validMessage === message.toLowerCase()) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   private async saveMessage(message: SlackMessage) {
