@@ -28,6 +28,7 @@
     "dev": "tsc --watch & nodemon dist",
     "start": "tsc && node dist/index.js",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
-    "prettier": "prettier --single-quote --trailing-comma es5 --write --parser typescript 'src/**/*.ts'"
+    "prettier": "prettier --single-quote --trailing-comma es5 --write --parser typescript 'src/**/*.ts'",
+    "debug": "tsc && node --inspect --debug-brk dist/index.js"
   }
 }
