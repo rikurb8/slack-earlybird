@@ -69,14 +69,14 @@ export default class MessageLogger {
 
   private isValidFirstMessage(message: string): boolean {
     // TODO: move valid greetings to a config file for easier configuration
-    const validFirstMessages = ["huomenta"];
+    const validFirstMessages = ['huomenta'];
 
     let validMessageFound = false;
     validFirstMessages.forEach(validMessage => {
       if (validMessage === message.toLowerCase()) {
         validMessageFound = true;
       }
-    })
+    });
 
     return validMessageFound;
   }

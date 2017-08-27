@@ -59,7 +59,11 @@ export default class Bot {
   private getMessageObservable(): Observable<SlackMessage> {
     const observable = Observable.create(observer => {
       this.bot.message((message: SlackMessage) => {
-        if (message.type === 'message' && !message.hidden) {
+        if (
+          message.channel === this.channel &&
+          message.type === 'message' &&
+          !message.hidden
+        ) {
           observer.next(message);
         }
       });
