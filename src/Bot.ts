@@ -2,6 +2,7 @@ import MessageLogger from './MessageLogger';
 import { Observable } from 'rxjs/Rx';
 import * as slack from 'slack';
 import * as Moment from 'moment';
+import { MessageHandleResult } from './MessageLogger';
 
 export interface SlackMessage {
   type: string;
@@ -35,13 +36,15 @@ export default class Bot {
     this.logger = messageLogger;
     this.logger.setMessageObservable(this.getMessageObservable());
 
+    this.subscribeToLoggerMessages();
     this.listenToCommands();
   }
 
-  /**
-   * listenToCommands
-   */
-  public listenToCommands() {
+  private subscribeToLoggerMessages() {
+    this.logger.getMessageHandleSubject().subscribe((result: MessageHandleResult) => this.handleLoggerResult(result));
+  }
+
+  private listenToCommands() {
     this.getMessageObservable().subscribe(async (message: SlackMessage) => {
       switch (message.text) {
         case 'listing':
@@ -101,5 +104,19 @@ export default class Bot {
         }
       }
     );
+  }
+
+  private handleLoggerResult(result: MessageHandleResult) {
+    // TODO: response messages must be configurable
+    switch (result) {
+      case MessageHandleResult.ValidFirstMessage:
+        this.sendMessage('TOSI HYVÄÄ HUOMENTA VAAN SINNEKIN :new_moon_with_face:');
+        break;
+      case MessageHandleResult.ErrorHandlingMessage:
+        this.sendMessage('Something went wrong handling the message, sorry');
+        break;
+      default:
+        break;
+    }
   }
 }

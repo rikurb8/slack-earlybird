@@ -1,15 +1,43 @@
-import { Observable } from 'rxjs/Rx';
+import { Observable, Subject } from 'rxjs/Rx';
 import { SlackMessage } from './Bot';
 import * as Moment from 'moment';
 import Message from './models/Message';
 import * as AsciiTable from 'ascii-table';
 
+export enum MessageHandleResult {
+  ValidFirstMessage,
+  InvalidFirstMessage,
+  NotFirstMessage,
+  ErrorHandlingMessage,
+};
+
 export default class MessageLogger {
+  private messageHandleSubject: Subject<MessageHandleResult>;
+
+  constructor() {
+    this.messageHandleSubject = new Subject();
+  }
+
   /**
-   * setMessageObservable
+   * setmessageSubject
    */
   public setMessageObservable(observable: Observable<SlackMessage>) {
-    observable.subscribe(msg => this.handleNewMessage(msg));
+    observable.subscribe(async msg => {
+      try {
+        const result = await this.handleNewMessage(msg);
+        this.messageHandleSubject.next(result);
+      } catch (error) {
+        console.log(`Error handling new incoming message, ${error}`);
+        this.messageHandleSubject.next(MessageHandleResult.ErrorHandlingMessage);
+      }
+    });
+  }
+
+  /**
+   * getMessageHandleSubject
+   */
+  public getMessageHandleSubject(): Subject<MessageHandleResult> {
+    return this.messageHandleSubject;
   }
 
   /**
@@ -43,18 +71,20 @@ export default class MessageLogger {
     return table.toString();
   }
 
-  private async handleNewMessage(message: SlackMessage) {
+  private async handleNewMessage(message: SlackMessage): Promise<MessageHandleResult> {
     if (!this.isValidFirstMessage(message.text)) {
-      return;
+      return MessageHandleResult.InvalidFirstMessage;
     }
 
     const isFirstMessageOfDay = await this.isFirstMessageOfDay();
 
     if (!isFirstMessageOfDay) {
-      return;
+      return MessageHandleResult.NotFirstMessage;
     }
 
-    this.saveMessage(message);
+    await this.saveMessage(message);
+
+    return MessageHandleResult.ValidFirstMessage;
   }
 
   private async isFirstMessageOfDay(): Promise<boolean> {
