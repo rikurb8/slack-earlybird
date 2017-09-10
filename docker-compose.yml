@@ -19,6 +19,8 @@ services:
     env_file:
       - config.env
     restart: always
+    ports:
+      - "6660:6660"
     container_name: slack-listings
     depends_on:
       - postgres
