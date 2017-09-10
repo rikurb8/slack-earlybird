@@ -10,4 +10,6 @@ RUN npm install
 
 ADD . .
 
+EXPOSE 6660
+
 CMD ["npm", "start"]
