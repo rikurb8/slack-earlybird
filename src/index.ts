@@ -2,6 +2,7 @@ import Bot from './Bot';
 import MessageLogger from './MessageLogger';
 import * as Knex from 'knex';
 import { Model } from 'objection';
+import * as express from 'express';
 
 const TOKEN = process.env.SLACKBOT_TOKEN;
 const CHANNEL = process.env.CHANNEL;
@@ -28,5 +29,21 @@ Model.knex(knex);
 
 const messageLogger = new MessageLogger();
 const bot = new Bot(TOKEN, messageLogger, CHANNEL);
+
+const app = express();
+
+app.get('/dump', async (req, res) => {
+  const dump = await messageLogger.getAllMessages();
+
+  res.setHeader('Content-Type', 'text/csv');
+  res.send(dump);
+});
+
+const server = app.listen(process.env.PORT || 6660, function() {
+    console.log(
+      `express up and running, port: ${server.address().port}`
+    );
+});
+
 
 console.log(`Initializating complete, posting to channel ${CHANNEL}..`);
